@@ -6,8 +6,8 @@ export default function Home() {
   return (
     <Layout>
       <Header />
-      <main>
-        <LargeWeatherCard />
+      <main className="container mx-auto">
+        <h1>oi</h1>
       </main>
     </Layout>
   );

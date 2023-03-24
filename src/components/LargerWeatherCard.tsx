@@ -15,7 +15,7 @@ interface WeatherInfo {
 
 export default function LargeWeatherCard(props: WeatherInfo) {
   return (
-    <div className="pt-5 pl-6 pb-7 rounded-[18px] px-4 max-w-[413px] max-h-[294px] bg-product">
+    <div className="pt-5 pl-6 pb-7 rounded-[18px] px-4 min-w-[413px] max-w-[413px] max-h-[294px] bg-product">
       <div className="flex justify-between items-center">
         <SunIcon className="h-16 w-16 text-white" />
         <span

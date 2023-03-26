@@ -11,13 +11,19 @@ interface WeatherInfo {
   day: string;
   humidity: number;
   wind: number;
+  icon: string;
 }
 
 export default function LargeWeatherCard(props: WeatherInfo) {
   return (
     <div className="pt-5 pl-6 pb-7 rounded-[18px] px-4 min-w-[413px] max-w-[413px] max-h-[294px] bg-product">
       <div className="flex justify-between items-center">
-        <SunIcon className="h-16 w-16 text-white" />
+        <Image
+          src={`http://openweathermap.org/img/wn/${props.icon}.png`}
+          alt="Icon"
+          width={64}
+          height={64}
+        />
         <span
           className="p-5 rounded-lg font-bold text-4xl bg-gradient-to-r from-transparent via-white to-white"
           style={{
@@ -62,7 +68,7 @@ export default function LargeWeatherCard(props: WeatherInfo) {
         </p>
         <p className="flex gap-1 items-center">
           <Image src="/vento.svg" alt="vento icone" width={24} height={24} />
-          {props.wind}km/h
+          {props.wind}m/s
         </p>
       </div>
     </div>

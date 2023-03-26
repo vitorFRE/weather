@@ -1,31 +1,63 @@
+import React, { useContext } from 'react';
 import Header from '@/components/Header';
 import LargeWeatherCard from '@/components/LargerWeatherCard';
 import Layout from '@/components/Layout';
 import SmallWeatherCard from '@/components/SmallWeatherCard';
+import { useQuery } from 'react-query';
+import { fetchWeatherData, fetchForecastData } from '../services/API';
+import { getCurrentDate } from '@/utils/data';
+import { SearchContext } from '@/utils/SearchContext';
 
 export default function Home() {
+  const { search: cidadeInput } = useContext(SearchContext);
+
+  const { horaMinutos, diaAtual, diaMes } = getCurrentDate();
+
+  const {
+    data: weatherData,
+    isLoading: weatherLoading,
+    error: weatherError,
+  } = useQuery(
+    ['weather', cidadeInput],
+    () =>
+      cidadeInput
+        ? fetchWeatherData(cidadeInput)
+        : fetchWeatherData('sao paulo'),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+
+  const {
+    data: forecastData,
+    isLoading: forecastLoading,
+    error: ForecastError,
+  } = useQuery('forecast', () => fetchForecastData('sao paulo'), {
+    refetchOnWindowFocus: false,
+    enabled: !!cidadeInput,
+  });
+
+  console.log(forecastData);
+
   return (
     <Layout>
       <Header />
       <main className="container mx-auto">
         <div className="flex justify-between pt-20">
-          <LargeWeatherCard
-            temp={22}
-            city="São Paulo"
-            country="Brasil"
-            description="Parcialmente nublado"
-            dayWeek="Quinta"
-            time="18:00"
-            day="24/04"
-            humidity={70}
-            wind={14}
-          />
-          <SmallWeatherCard temp={23} dayWeek="Sex" />
-          <SmallWeatherCard temp={23} dayWeek="Sex" />
-          <SmallWeatherCard temp={23} dayWeek="Sex" />
-          <SmallWeatherCard temp={23} dayWeek="Sex" />
-          <SmallWeatherCard temp={23} dayWeek="Sex" />
-          <SmallWeatherCard temp={23} dayWeek="Sex" />
+          {weatherData && (
+            <LargeWeatherCard
+              temp={weatherData?.main.temp}
+              city={weatherData?.name}
+              country={weatherData?.sys.country}
+              description={weatherData?.weather[0].description}
+              dayWeek={diaAtual}
+              time={horaMinutos}
+              day={diaMes}
+              humidity={weatherData?.main.humidity}
+              wind={weatherData?.wind.speed}
+              icon={weatherData?.weather[0].icon}
+            />
+          )}
         </div>
       </main>
     </Layout>

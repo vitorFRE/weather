@@ -32,12 +32,20 @@ export default function Home() {
     data: forecastData,
     isLoading: forecastLoading,
     error: ForecastError,
-  } = useQuery('forecast', () => fetchForecastData('sao paulo'), {
-    refetchOnWindowFocus: false,
-    enabled: !!cidadeInput,
-  });
+  } = useQuery(
+    'forecast',
+    () =>
+      cidadeInput
+        ? fetchForecastData(cidadeInput)
+        : fetchForecastData('sao paulo'),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
 
-  console.log(forecastData);
+  if (forecastData) {
+    console.log(forecastData);
+  }
 
   return (
     <Layout>
@@ -59,6 +67,18 @@ export default function Home() {
             />
           )}
         </div>
+        {/* {forecastData && (
+          <div>
+            {forecastData.list.map((day) => (
+              <SmallWeatherCard
+                key={day.dt}
+                temp={day.main.temp}
+                dayWeek={day.dt_txt}
+                icon={day.weather[0].icon}
+              />
+            ))}
+          </div>
+        )} */}
       </main>
     </Layout>
   );

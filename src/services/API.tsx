@@ -20,6 +20,20 @@ export interface WeatherData {
   };
 }
 
+export interface TForecast {
+  list: {
+    dt: number;
+    main: {
+      temp: number;
+    };
+  }[];
+  city: {
+    name: string;
+  };
+  cod: string;
+  cnt: number;
+}
+
 export async function fetchWeatherData(city: string): Promise<WeatherData> {
   const response = await axios.get<WeatherData>(
     `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=pt_br`,
@@ -27,8 +41,8 @@ export async function fetchWeatherData(city: string): Promise<WeatherData> {
   return response.data;
 }
 
-export async function fetchForecastData(city: string): Promise<WeatherData> {
-  const response = await axios.get<WeatherData>(
+export async function fetchForecastData(city: string): Promise<TForecast> {
+  const response = await axios.get<TForecast>(
     `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=pt_br`,
   );
   return response.data;

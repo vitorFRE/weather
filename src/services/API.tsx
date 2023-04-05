@@ -11,9 +11,17 @@ export interface WeatherData {
     temp: number;
     feels_like: number;
     humidity: number;
+    temp_max: number;
+    temp_min: number;
+  };
+  coord: {
+    lon: number;
+    lat: number;
   };
   sys: {
     country: string;
+    sunrise: number;
+    sunset: number;
   };
   wind: {
     speed: number;

@@ -15,7 +15,7 @@ export default function Header() {
   ]) as WeatherData;
 
   return (
-    <header className="container mx-auto px-4 pt-7 flex justify-between">
+    <header className="container mx-auto px-4 pt-7 flex flex-col justify-between items-center gap-4 md:flex-row md:justify-between md:items-center">
       <div className="flex gap-3 items-center">
         <MapPinIcon className="h-8 w-8 text-product" />
         <p className="text-xl font-semibold">

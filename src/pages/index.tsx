@@ -3,11 +3,12 @@ import Header from '@/components/Header';
 import LargeWeatherCard from '@/components/LargerWeatherCard';
 import Layout from '@/components/Layout';
 import { useQuery } from 'react-query';
-import { fetchWeatherData, fetchForecastData } from '../services/API';
+import { fetchWeatherData } from '../services/API';
 import { getCurrentDate } from '@/utils/data';
 import { SearchContext } from '@/utils/SearchContext';
 import SunriseSunset from '@/components/SunriseSunset';
 import TempMinMax from '@/components/TempMinMax';
+import SmallCity from '@/components/SmallCity';
 
 export default function Home() {
   const { search: cidadeInput } = useContext(SearchContext);
@@ -29,17 +30,35 @@ export default function Home() {
     },
   );
 
-  if (weatherData) {
-    console.log(weatherData);
+  const cidades = ['sao paulo', 'new york', 'london'];
+  const {
+    data: multiplesWeatherData,
+    isLoading: multiplesWeatherLoading,
+    error: multiplesWeatherError,
+  } = useQuery(
+    ['multiplesWeather', cidadeInput],
+    async () => {
+      const results = await Promise.all(
+        cidades.map((cidade) => fetchWeatherData(cidade)),
+      );
+      return results;
+    },
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+
+  if (multiplesWeatherData) {
+    console.log(multiplesWeatherData);
   }
 
   return (
     <Layout>
       <Header />
       <main className="container mx-auto">
-        <div className="flex flex-col md:flex-row lg:justify-between p-4 gap-2">
+        <div className="flex justify-between mt-6 gap-4 flex-col md:flex-row">
           {weatherData && (
-            <div className="w-full ">
+            <div>
               <LargeWeatherCard
                 temp={weatherData?.main.temp}
                 city={weatherData?.name}
@@ -56,7 +75,7 @@ export default function Home() {
           )}
 
           {weatherData && (
-            <div className="w-full">
+            <div>
               <TempMinMax
                 tempMax={weatherData.main.temp_max}
                 tempMin={weatherData.main.temp_min}
@@ -65,7 +84,7 @@ export default function Home() {
           )}
 
           {weatherData && (
-            <div className="w-full">
+            <div>
               <SunriseSunset
                 sunrise={weatherData?.sys.sunrise}
                 sunset={weatherData?.sys.sunset}
@@ -74,6 +93,19 @@ export default function Home() {
           )}
         </div>
       </main>
+      <div className="container mx-auto flex flex-col gap-4 mt-5">
+        {multiplesWeatherData &&
+          multiplesWeatherData.map((cityData, index) => (
+            <div key={index}>
+              <SmallCity
+                city={cityData.name}
+                description={cityData.weather[0].description}
+                icon={cityData.weather[0].icon}
+                temp={cityData.main.temp}
+              />
+            </div>
+          ))}
+      </div>
     </Layout>
   );
 }

@@ -16,7 +16,7 @@ interface WeatherInfo {
 
 export default function LargeWeatherCard(props: WeatherInfo) {
   return (
-    <div className="container mx-auto px-4 pt-5 pl-6 pb-7 rounded-[18px] max-w-[413px] max-h-[294px] bg-product">
+    <div className="container mx-auto max-w-[413px] px-4 pt-5 pl-6 pb-7 rounded-[18px] bg-product">
       <div className="flex justify-between items-center">
         <Image
           src={`http://openweathermap.org/img/wn/${props.icon}.png`}

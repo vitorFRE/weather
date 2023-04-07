@@ -1,9 +1,11 @@
 import { SunIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 
 interface WeatherInfo {
   temp: number;
   imgUrl?: string;
   dayWeek: string;
+  icon: string;
 }
 
 export default function SmallWeatherCard(props: WeatherInfo) {
@@ -17,7 +19,12 @@ export default function SmallWeatherCard(props: WeatherInfo) {
       >
         {props.dayWeek}
       </h2>
-      <SunIcon className="h-16 w-16 text-white" />
+      <Image
+        src={`http://openweathermap.org/img/wn/${props.icon}.png`}
+        alt="Icon"
+        width={64}
+        height={64}
+      />
       <h3
         className="font-bold text-4xl pt-1 pb-1"
         style={{
